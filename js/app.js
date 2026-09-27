@@ -186,13 +186,92 @@ document.getElementById("run-suite-btn").addEventListener("click", async () => {
   document.getElementById("stat-accept").textContent = `${data.accepted}/${data.total}`;
 });
 
+// ---------------------------------------------------------- translator ---
+document.getElementById("translate-run-btn").addEventListener("click", runTranslate);
+document.getElementById("translate-input").addEventListener("keydown", e => { if (e.key === "Enter") runTranslate(); });
+
+function renderTranslateResult(data){
+  const directionLabels = {
+    to_french: "Français", to_english: "English",
+    from_french: "Pidgin / Franc-anglais", from_english: "Pidgin / Franc-anglais",
+  };
+
+  const words = data.words.map(w => {
+    const statusClass = "status-" + w.status;
+    const showMeaning = w.meaning && w.meaning !== w.translation;
+    return `
+      <div class="translate-word ${statusClass}">
+        <span class="src">${esc(w.source)}</span>
+        <span class="arrow">&#8595;</span>
+        <span class="tgt">${esc(w.translation)}</span>
+        ${showMeaning ? `<span class="meaning">${esc(w.meaning)}</span>` : ""}
+        <span class="translate-word-status ${w.status}">${
+          w.status === "dictionary" ? "dictionnaire" : w.status === "online" ? "recherche en ligne" : "non trouvé"
+        }</span>
+      </div>`;
+  }).join("");
+
+  const onlineNote = data.used_online_fallback
+    ? `<p class="translate-note info">Au moins un mot a été traduit via une recherche en ligne d'appoint — à prendre avec prudence (moins fiable que le dictionnaire vérifié).</p>`
+    : "";
+
+  const unresolvedNote = data.unresolved_words.length
+    ? `<p class="translate-note warn">Non couverts par le dictionnaire : ${data.unresolved_words.map(esc).join(", ")}</p>`
+    : "";
+
+  return `
+    <div class="translate-sentence">
+      <span class="label">${directionLabels[data.direction]}</span>
+      ${esc(data.translated_text)}
+    </div>
+    ${onlineNote}
+    ${unresolvedNote}
+    <div class="translate-words">${words}</div>
+  `;
+}
+
+async function runTranslate(){
+  const text = document.getElementById("translate-input").value.trim();
+  const direction = document.getElementById("translate-direction").value;
+  if (!text) return;
+
+  const loading = document.getElementById("translate-loading");
+  const resultBox = document.getElementById("translate-result");
+  loading.hidden = false;
+  resultBox.innerHTML = "";
+
+  try {
+    const res = await fetch(`${API}/api/translate`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({text, direction}),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      resultBox.innerHTML = `<p class="translate-note warn">${esc(data.error || "La traduction a échoué.")}</p>`;
+      return;
+    }
+    resultBox.innerHTML = renderTranslateResult(data);
+  } catch (e) {
+    resultBox.innerHTML = `<p class="translate-note warn">Impossible de contacter le serveur de traduction.</p>`;
+  } finally {
+    loading.hidden = true;
+  }
+}
+
 // ------------------------------------------------------------- boot up ---
 (async function init(){
-  await loadStatements();
-  // Pre-warm the accept/reject stat on the overview tab.
+  const bootLoader = document.getElementById("boot-loader");
   try {
+    await loadStatements();
+    // Pre-warm the accept/reject stat on the overview tab.
     const res = await fetch(`${API}/api/parser/test-suite`);
     const data = await res.json();
     document.getElementById("stat-accept").textContent = `${data.accepted}/${data.total}`;
-  } catch(e) {}
+  } catch(e) {
+    // Even if the backend isn't reachable yet, don't leave the loading screen up forever.
+  } finally {
+    bootLoader.classList.add("is-hidden");
+    setTimeout(() => bootLoader.remove(), 400);
+  }
 })();

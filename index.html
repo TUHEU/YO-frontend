@@ -11,6 +11,12 @@
 </head>
 <body>
 
+<div id="boot-loader" class="boot-loader">
+  <img src="assets/icon.svg" alt="Yo-B" class="boot-loader-logo">
+  <div class="boot-loader-spinner"></div>
+  <p class="boot-loader-text">Chargement de Yo-B…</p>
+</div>
+
 <div class="app-shell">
 
   <aside class="rail">
@@ -28,6 +34,7 @@
       <button class="rail-link" data-tab="lexical">Analyse lexicale</button>
       <button class="rail-link" data-tab="syntax">Analyse syntaxique</button>
       <button class="rail-link" data-tab="parser">Testeur / Parseur</button>
+      <button class="rail-link" data-tab="translator">Traducteur</button>
     </nav>
 
     <div class="rail-footer">
@@ -196,6 +203,37 @@
           <tbody></tbody>
         </table>
       </div>
+    </section>
+
+    <!-- ================= TRANSLATOR ================= -->
+    <section class="panel" id="panel-translator">
+      <header class="panel-head">
+        <h2>Traducteur</h2>
+        <p>Traduction mot-à-mot, à partir d'un petit dictionnaire vérifié — jamais inventée. Un mot absent du dictionnaire est signalé comme tel, ou (si activé) soumis à une recherche en ligne d'appoint.</p>
+      </header>
+
+      <div class="translator-controls">
+        <div class="direction-select">
+          <label for="translate-direction">Sens de traduction</label>
+          <select id="translate-direction">
+            <option value="to_french">Pidgin / Franc-anglais → Français</option>
+            <option value="to_english">Pidgin / Franc-anglais → English</option>
+            <option value="from_french">Français → Pidgin / Franc-anglais</option>
+            <option value="from_english">English → Pidgin / Franc-anglais</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="try-box">
+        <input type="text" id="translate-input" placeholder="e.g. Bendskin hala me small money for quartier">
+        <button id="translate-run-btn">Traduire</button>
+      </div>
+
+      <div id="translate-loading" class="translate-loading" hidden>
+        <span class="spinner"></span> Traduction en cours…
+      </div>
+
+      <div id="translate-result"></div>
     </section>
 
   </main>
