@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yo-B — Lexical &amp; Syntactic Analysis of Yaoundé Speech</title>
+<link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="rail">
+    <div class="rail-brand">
+      <img src="assets/icon.svg" alt="Yo-B" class="rail-logo">
+      <div>
+        <div class="rail-brand-name">Yo-B</div>
+        <div class="rail-brand-sub">street&nbsp;grammar&nbsp;lab</div>
+      </div>
+    </div>
+
+    <nav class="rail-nav" id="rail-nav">
+      <button class="rail-link is-active" data-tab="overview">Aperçu</button>
+      <button class="rail-link" data-tab="collection">Collecte de données</button>
+      <button class="rail-link" data-tab="lexical">Analyse lexicale</button>
+      <button class="rail-link" data-tab="syntax">Analyse syntaxique</button>
+      <button class="rail-link" data-tab="parser">Testeur / Parseur</button>
+    </nav>
+
+    <div class="rail-footer">
+      CS4110 — Compiler Construction<br>
+      <em>Lexical &amp; Syntactic Analysis of Informal Urban Communication in Yaoundé</em>
+    </div>
+  </aside>
+
+  <main class="stage">
+
+    <!-- ================= OVERVIEW ================= -->
+    <section class="panel is-active" id="panel-overview">
+      <header class="hero">
+        <p class="hero-eyebrow-free">Yaoundé speaks in layers — English, French, Pidgin, Ewondo, and franc-anglais, all in one sentence.</p>
+        <h1 class="hero-title">Yo-B reads the <span class="hero-underline">grammar of the street</span>.</h1>
+        <p class="hero-lede">A small compiler-construction pipeline — lexer, grammar transformer, and LL(1) parser — built on real taxi, market, and campus talk from Yaoundé.</p>
+      </header>
+
+      <div class="stat-row" id="overview-stats">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-statements">—</div>
+          <div class="stat-label">collected statements</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-tokens">—</div>
+          <div class="stat-label">distinct tokens seen</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-accept">—</div>
+          <div class="stat-label">sentences accepted by the grammar</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-topics">10</div>
+          <div class="stat-label">topics covered</div>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <div class="info-card">
+          <h3>1 · Collecte</h3>
+          <p>Transcribed statements from taxis, chop houses, bendskins, the market, and campus — kept exactly as spoken, slang and mistakes included.</p>
+        </div>
+        <div class="info-card">
+          <h3>2 · Lexique</h3>
+          <p>A hand-written lexer splits each sentence into nouns, verbs, slang, and code-mixed expressions using regular expressions and lookup tables.</p>
+        </div>
+        <div class="info-card">
+          <h3>3 · Syntaxe</h3>
+          <p>A context-free grammar is built, then transformed — left recursion removed, common prefixes factored — before FIRST/FOLLOW and an LL(1) table are computed.</p>
+        </div>
+        <div class="info-card">
+          <h3>4 · Parseur</h3>
+          <p>A predictive LL(1) parser reads the tagged token stream and decides, step by step, whether a sentence fits the grammar.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= DATA COLLECTION ================= -->
+    <section class="panel" id="panel-collection">
+      <header class="panel-head">
+        <h2>Collecte de données</h2>
+        <p>Real-life statements heard around Yaoundé, organised by topic. Replace the sample rows with your group's own transcriptions before submission.</p>
+      </header>
+
+      <form class="add-form" id="add-statement-form">
+        <input type="text" id="new-statement-text" placeholder="Type or paste a transcribed statement…" required>
+        <select id="new-statement-topic">
+          <option>Taxi and commuting issues</option>
+          <option>Poor internet connectivity</option>
+          <option>Limited Electricity supply</option>
+          <option>Market bargaining</option>
+          <option>Rainy season struggles</option>
+          <option>Fuel scarcity</option>
+          <option>Roadside business interactions</option>
+          <option>Bendskin communication</option>
+          <option>Security announcements or checkpoints</option>
+          <option>Life at the ICT University</option>
+        </select>
+        <button type="submit">Add statement</button>
+      </form>
+
+      <div class="table-wrap">
+        <table id="statements-table">
+          <thead><tr><th>#</th><th>Topic</th><th>Transcribed statement</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= LEXICAL ================= -->
+    <section class="panel" id="panel-lexical">
+      <header class="panel-head">
+        <h2>Analyse lexicale</h2>
+        <p>Type any sentence — English, French, Pidgin, or a mix — and see how the lexer tags it token by token.</p>
+      </header>
+
+      <div class="try-box">
+        <input type="text" id="lexer-input" placeholder="e.g. Bendskin hala me small money for quartier">
+        <button id="lexer-run-btn">Analyze</button>
+      </div>
+      <div class="token-output" id="lexer-output"></div>
+
+      <h3 class="subhead">Token frequency across the collected corpus</h3>
+      <div class="freq-layout">
+        <div class="table-wrap">
+          <table id="freq-table">
+            <thead><tr><th>Token</th><th>Count</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="table-wrap">
+          <table id="cat-table">
+            <thead><tr><th>Category</th><th>Occurrences</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SYNTAX ================= -->
+    <section class="panel" id="panel-syntax">
+      <header class="panel-head">
+        <h2>Analyse syntaxique</h2>
+        <p>From a left-recursive grammar to an LL(1)-ready one — every transformation shown explicitly.</p>
+      </header>
+
+      <div class="grammar-stages" id="grammar-stages"></div>
+
+      <h3 class="subhead">FIRST &amp; FOLLOW sets</h3>
+      <div class="freq-layout">
+        <div class="table-wrap">
+          <table id="first-table"><thead><tr><th>Non-terminal</th><th>FIRST</th></tr></thead><tbody></tbody></table>
+        </div>
+        <div class="table-wrap">
+          <table id="follow-table"><thead><tr><th>Non-terminal</th><th>FOLLOW</th></tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+
+      <h3 class="subhead">LL(1) parsing table</h3>
+      <div class="table-wrap">
+        <table id="ll1-table"></table>
+      </div>
+      <p class="ll1-verdict" id="ll1-verdict"></p>
+    </section>
+
+    <!-- ================= PARSER ================= -->
+    <section class="panel" id="panel-parser">
+      <header class="panel-head">
+        <h2>Testeur / Parseur LL(1)</h2>
+        <p>Run the parser on one sentence, or on the whole collected corpus at once.</p>
+      </header>
+
+      <div class="try-box">
+        <input type="text" id="parser-input" placeholder="e.g. Taxi drop me for quartier">
+        <button id="parser-run-btn">Parse</button>
+      </div>
+      <div id="parser-single-result"></div>
+
+      <div class="suite-header">
+        <h3 class="subhead">Full test suite (all collected statements)</h3>
+        <button id="run-suite-btn" class="secondary-btn">Run on all statements</button>
+      </div>
+      <div class="table-wrap">
+        <table id="suite-table">
+          <thead><tr><th>Statement</th><th>Terminals fed to parser</th><th>Result</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
