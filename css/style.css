@@ -49,10 +49,21 @@ button{ font-family:inherit; cursor:pointer; }
   top:0;
   height:100vh;
 }
-.rail-brand{ display:flex; align-items:center; gap:12px; margin-bottom:34px; }
+.rail-brand{ display:flex; align-items:center; gap:12px; margin-bottom:20px; }
 .rail-logo{ width:42px; height:42px; border-radius:10px; }
 .rail-brand-name{ font-family:'Fraunces', serif; font-size:22px; font-weight:700; color:var(--paper); }
 .rail-brand-sub{ font-size:12px; color:var(--ochre); letter-spacing:.02em; }
+
+.lang-switch{
+  display:flex; gap:4px; background:var(--charcoal-2); border-radius:8px; padding:3px;
+  margin-bottom:22px; width:fit-content;
+}
+.lang-switch button{
+  background:transparent; border:none; color:#9B9788; padding:6px 14px; border-radius:6px;
+  font-size:12.5px; font-weight:700; letter-spacing:.03em;
+}
+.lang-switch button.is-active{ background:var(--ochre); color:var(--charcoal); }
+.lang-switch button:hover:not(.is-active){ color:var(--paper); }
 
 .rail-nav{ display:flex; flex-direction:column; gap:4px; }
 .rail-link{
@@ -68,6 +79,12 @@ button{ font-family:inherit; cursor:pointer; }
 }
 .rail-link:hover{ background:var(--charcoal-2); color:var(--paper); }
 .rail-link.is-active{ background:var(--ochre); color:var(--charcoal); font-weight:600; }
+
+.rail-help{
+  margin-top:14px; text-align:left; background:transparent; border:1px dashed #3A4A3F;
+  color:#9B9788; padding:9px 12px; border-radius:8px; font-size:13px; font-weight:500;
+}
+.rail-help:hover{ color:var(--paper); border-color:#4A5A4F; }
 
 .rail-footer{
   margin-top:auto;
@@ -272,3 +289,35 @@ tr:last-child td{ border-bottom:none; }
 }
 .translate-note.info{ background:#DCEAF7; color:#204A6C; }
 .translate-note.warn{ background:#FCE3DC; color:var(--brick); }
+
+/* ---------------- onboarding ---------------- */
+.onboarding-overlay{
+  position:fixed; inset:0; z-index:900;
+  background:rgba(20,32,28,0.72);
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+}
+.onboarding-overlay[hidden]{ display:none; }
+.onboarding-card{
+  background:var(--paper); border-radius:16px; max-width:480px; width:100%;
+  padding:32px 32px 22px; box-shadow:0 24px 60px rgba(0,0,0,.35);
+}
+.onboarding-card h2{ font-size:22px; margin-bottom:12px; }
+.onboarding-card p{ font-size:14.5px; color:#4B463C; line-height:1.6; }
+.onboarding-footer{ margin-top:26px; }
+.onboarding-dots{ display:flex; gap:6px; justify-content:center; margin-bottom:10px; }
+.onboarding-dots .dot{ width:7px; height:7px; border-radius:50%; background:var(--line); }
+.onboarding-dots .dot.is-active{ background:var(--ochre); }
+.onboarding-progress{ text-align:center; font-size:11.5px; color:#8b8577; margin-bottom:16px; }
+.onboarding-actions{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.ghost-btn{
+  background:transparent; border:none; color:#6b6555; font-size:14px; font-weight:600; padding:10px 6px;
+}
+.ghost-btn:hover{ color:var(--charcoal); }
+.ghost-btn.is-invisible{ visibility:hidden; }
+.primary-btn{
+  margin-left:auto; background:var(--charcoal); color:var(--paper); border:none;
+  padding:11px 22px; border-radius:8px; font-weight:600; font-size:14px;
+}
+.primary-btn:hover{ background:var(--charcoal-2); }
+
