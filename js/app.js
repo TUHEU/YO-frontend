@@ -254,12 +254,47 @@ document.getElementById("run-suite-btn").addEventListener("click", async () => {
 document.getElementById("translate-run-btn").addEventListener("click", runTranslate);
 document.getElementById("translate-input").addEventListener("keydown", e => { if (e.key === "Enter") runTranslate(); });
 
+// Maps a (from, to) language pair to the backend's direction string. "pidgin" is
+// Yo-B's own glossary-backed language; french/english can go direct to each other
+// via the online translator only (no Pidgin dictionary path exists for that pair).
+const DIRECTION_BY_PAIR = {
+  "pidgin>french": "to_french",
+  "pidgin>english": "to_english",
+  "french>pidgin": "from_french",
+  "english>pidgin": "from_english",
+  "french>english": "french_to_english",
+  "english>french": "english_to_french",
+};
+const ONLINE_ONLY_DIRECTIONS = new Set(["french_to_english", "english_to_french"]);
+
 const DIRECTION_RESULT_KEY = {
   to_french: "translator.resultLabel.french",
   to_english: "translator.resultLabel.english",
   from_french: "translator.resultLabel.pidgin",
   from_english: "translator.resultLabel.pidgin",
+  french_to_english: "translator.resultLabel.english",
+  english_to_french: "translator.resultLabel.french",
 };
+
+function currentTranslateDirection(){
+  const from = document.getElementById("translate-from").value;
+  const to = document.getElementById("translate-to").value;
+  if (from === to) return null;
+  return DIRECTION_BY_PAIR[`${from}>${to}`] || null;
+}
+
+function updateTranslateControlState(){
+  const from = document.getElementById("translate-from").value;
+  const to = document.getElementById("translate-to").value;
+  const sameLang = from === to;
+  const direction = sameLang ? null : DIRECTION_BY_PAIR[`${from}>${to}`];
+  document.getElementById("translate-same-lang-warning").hidden = !sameLang;
+  document.getElementById("translate-online-only-warning").hidden = !(direction && ONLINE_ONLY_DIRECTIONS.has(direction));
+  document.getElementById("translate-run-btn").disabled = sameLang;
+}
+document.getElementById("translate-from").addEventListener("change", updateTranslateControlState);
+document.getElementById("translate-to").addEventListener("change", updateTranslateControlState);
+updateTranslateControlState();
 
 function renderTranslateResult(){
   const data = lastResult.translate;
@@ -313,8 +348,8 @@ function renderTranslatePanel(){
 
 async function runTranslate(){
   const text = document.getElementById("translate-input").value.trim();
-  const direction = document.getElementById("translate-direction").value;
-  if (!text) return;
+  const direction = currentTranslateDirection();
+  if (!text || !direction) return;
 
   const loading = document.getElementById("translate-loading");
   const resultBox = document.getElementById("translate-result");

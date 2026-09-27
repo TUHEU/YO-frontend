@@ -273,15 +273,25 @@
 
       <div class="translator-controls">
         <div class="direction-select">
-          <label for="translate-direction" data-i18n="translator.directionLabel">Sens de traduction</label>
-          <select id="translate-direction">
-            <option value="to_french" data-i18n="translator.direction.toFrench"></option>
-            <option value="to_english" data-i18n="translator.direction.toEnglish"></option>
-            <option value="from_french" data-i18n="translator.direction.fromFrench"></option>
-            <option value="from_english" data-i18n="translator.direction.fromEnglish"></option>
+          <label for="translate-from" data-i18n="translator.fromLabel">Traduire de</label>
+          <select id="translate-from">
+            <option value="pidgin" data-i18n="translator.lang.pidgin"></option>
+            <option value="french" data-i18n="translator.lang.french"></option>
+            <option value="english" data-i18n="translator.lang.english"></option>
+          </select>
+        </div>
+        <div class="direction-arrow" aria-hidden="true">&#8594;</div>
+        <div class="direction-select">
+          <label for="translate-to" data-i18n="translator.toLabel">vers</label>
+          <select id="translate-to">
+            <option value="french" data-i18n="translator.lang.french"></option>
+            <option value="english" data-i18n="translator.lang.english"></option>
+            <option value="pidgin" data-i18n="translator.lang.pidgin"></option>
           </select>
         </div>
       </div>
+      <p class="translate-note warn" id="translate-same-lang-warning" data-i18n="translator.sameLanguage" hidden></p>
+      <p class="translate-note info" id="translate-online-only-warning" data-i18n="translator.onlineOnlyDirection" hidden></p>
 
       <div class="try-box">
         <input type="text" id="translate-input" data-i18n-placeholder="translator.placeholder">

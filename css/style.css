@@ -239,10 +239,12 @@ tr:last-child td{ border-bottom:none; }
 @keyframes spin{ to{ transform:rotate(360deg); } }
 
 /* ---------------- translator ---------------- */
-.translator-controls{ margin-bottom:16px; }
-.direction-select{ display:flex; flex-direction:column; gap:6px; max-width:360px; }
+.translator-controls{ margin-bottom:10px; display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; }
+.direction-select{ display:flex; flex-direction:column; gap:6px; min-width:220px; }
 .direction-select label{ font-size:13px; font-weight:600; color:#4B463C; }
 .direction-select select{ padding:11px 12px; border:1px solid var(--line); border-radius:8px; background:#fff; font-size:14.5px; }
+.direction-arrow{ font-size:20px; color:var(--ochre); padding-bottom:11px; }
+button:disabled{ opacity:.45; cursor:not-allowed; }
 
 .translate-loading{
   align-items:center; gap:10px; margin:10px 0 18px;
