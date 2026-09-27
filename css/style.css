@@ -228,9 +228,10 @@ tr:last-child td{ border-bottom:none; }
 .direction-select select{ padding:11px 12px; border:1px solid var(--line); border-radius:8px; background:#fff; font-size:14.5px; }
 
 .translate-loading{
-  display:flex; align-items:center; gap:10px; margin:10px 0 18px;
+  align-items:center; gap:10px; margin:10px 0 18px;
   font-size:14px; color:#4B463C;
 }
+.translate-loading:not([hidden]){ display:flex; }
 .spinner{
   width:16px; height:16px; border-radius:50%; display:inline-block;
   border:2px solid var(--line); border-top-color:var(--ochre);
